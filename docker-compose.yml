@@ -42,7 +42,7 @@ services:
                 hostname: jackett
                 volumes:
                         - ${BASE_DIR}/config/jackett:/config
-                        - ${BASE_DIR}/local/torrents:/downloads
+                        - ${BASE_DIR}/local/torrents:/data
                         - /etc/localtime:/etc/localtime:ro
                 environment:
                         - PUID=${PUID}
@@ -58,7 +58,7 @@ services:
                 hostname: sonarr
                 volumes:
                         - ${BASE_DIR}/config/sonarr:/config
-                        - ${BASE_DIR}/local/torrents:/downloads
+                        - ${BASE_DIR}/local/torrents:/data
                         - /etc/localtime:/etc/localtime:ro
                         - gdrive-tv:/tv
                 environment:
@@ -80,7 +80,7 @@ services:
                 hostname: radarr
                 volumes:
                         - ${BASE_DIR}/config/radarr:/config
-                        - ${BASE_DIR}/local/torrents:/downloads
+                        - ${BASE_DIR}/local/torrents:/data
                         - /etc/localtime:/etc/localtime:ro
                         - gdrive-movies:/movies
                 environment:
