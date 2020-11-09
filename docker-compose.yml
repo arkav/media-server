@@ -1,0 +1,126 @@
+version: "3"
+services:
+        # deluge
+        qbittorrentvpn:
+                image: binhex/arch-qbittorrentvpn
+                container_name: qbittorrentvpn
+                ports:
+                        - 6881:6881
+                        - 6881:6881/udp
+                        - 8080:8080
+                        - 8118:8118
+                networks:
+                        - media
+                hostname: qbittorrentvpn
+                volumes:
+                        - ${BASE_DIR}/config/qbittorrent:/config
+                        - ${BASE_DIR}/local/torrents:/data
+                        - /etc/localtime:/etc/localtime:ro
+                environment:
+                        - LAN_NETWORK=192.168.1.0/24
+                        - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
+                        - WEBGUI_PORT=8080
+                        - DEBUG=false
+                        - ENABLE_PRIVOXY=no
+                          # vpn
+                        - VPN_ENABLED=yes
+                        - VPN_PROV=airvpn
+                          # id <username>
+                        - ADDITIONAL_PORTS=39821
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - UMASK=${UMASK}
+                cap_add:
+                        - NET_ADMIN
+        jackett:
+                image: linuxserver/jackett
+                container_name: jackett
+                ports:
+                        - 9117:9117
+                networks:
+                        - media
+                hostname: jackett
+                volumes:
+                        - ${BASE_DIR}/config/jackett:/config
+                        - ${BASE_DIR}/local/torrents/incomplete:/downloads
+                        - /etc/localtime:/etc/localtime:ro
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - UMASK=${UMASK}
+        sonarr:
+                image: linuxserver/sonarr
+                container_name: sonarr
+                networks:
+                        - media
+                ports:
+                        - 8989:8989
+                hostname: sonarr
+                volumes:
+                        - ${BASE_DIR}/config/sonarr:/config
+                        - ${BASE_DIR}/local/torrents/incomplete:/downloads
+                        - /etc/localtime:/etc/localtime:ro
+                        - type: bind
+                          source: gdrive:/tv
+                          target: /tv
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - UMASK=${UMASK}
+                        - TZ=Europe/London
+                depends_on:
+                        - qbittorrentvpn
+                        - jackett
+                restart: unless-stopped
+        radarr:
+                image: linuxserver/radarr
+                container_name: radarr
+                networks:
+                        - media
+                ports:
+                        - 7878:7878
+                hostname: radarr
+                volumes:
+                        - ${BASE_DIR}/config/radarr:/config
+                        - ${BASE_DIR}/local/torrents/incomplete:/downloads
+                        - /etc/localtime:/etc/localtime:ro
+                        - type: bind
+                          source: gdrive:/movies
+                          target: /movies
+                environment:
+                        - PUID=${PUID}
+                        - PGID=${PGID}
+                        - UMASK=${UMASK}
+                        - TZ=Europe/London
+                depends_on:
+                        - qbittorrentvpn
+                        - jackett
+                restart: unless-stopped
+        jellyfin:
+                image: jellyfin/jellyfin
+                container_name: jellyfin
+                hostname: jellyfin
+                networks:
+                        - media
+                ports:
+                        - 8096:8096
+                user: ${PUID}:${GUID}
+                volumes:
+                        - ${BASE_DIR}/config/jellyfin:/config
+                        - /etc/localtime:/etc/localtime:ro
+                        - gdrive:/media:rw
+                # pass throught my igpu
+                devices:
+                        - /dev/dri/renderD128:/dev/dri/renderD128
+                        - /dev/dri/card0:/dev/dri/card0
+                restart: unless-stopped
+
+volumes:
+        gdrive:
+                driver: sapk/plugin-rclone:latest
+                driver_opts:
+                        config: "${RCLONE_CONFIG}"
+                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
+                        remote: ${RCLONE_BUCKET}:/
+networks:
+        media:
