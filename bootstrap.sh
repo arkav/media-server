@@ -2,13 +2,13 @@ rm .env
 BASE_DIR=$(pwd)
 echo "set base dir: ${BASE_DIR}"
 echo "BASE_DIR=${BASE_DIR}" >> .env
-UID=$(id -u)
+PUID=$(id -u)
 echo "set uid: ${UID}"
 echo "PUID=${UID}" >> .env
-GID=$(id -g)
+PGID=$(id -g)
 echo "set gid: ${GID}"
 echo "PGID=${GID}" >> .env
-UMASK=$(umask)
+PUMASK=$(umask)
 echo "set umask: ${UMASK}"
 echo "UMASK=${UMASK}" >> .env
 RCLONE_CONFIG=$(base64 -w0 ~/.config/rclone/rclone.conf)

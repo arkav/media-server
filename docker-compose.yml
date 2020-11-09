@@ -1,4 +1,4 @@
-version: "3"
+version: "3.2"
 services:
         # deluge
         qbittorrentvpn:
@@ -60,9 +60,7 @@ services:
                         - ${BASE_DIR}/config/sonarr:/config
                         - ${BASE_DIR}/local/torrents/incomplete:/downloads
                         - /etc/localtime:/etc/localtime:ro
-                        - type: bind
-                          source: gdrive:/tv
-                          target: /tv
+                        - gdrive-tv:/tv
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
@@ -84,9 +82,7 @@ services:
                         - ${BASE_DIR}/config/radarr:/config
                         - ${BASE_DIR}/local/torrents/incomplete:/downloads
                         - /etc/localtime:/etc/localtime:ro
-                        - type: bind
-                          source: gdrive:/movies
-                          target: /movies
+                        - gdrive-movies:/movies
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
@@ -104,7 +100,7 @@ services:
                         - media
                 ports:
                         - 8096:8096
-                user: ${PUID}:${GUID}
+                user: ${PUID}:${PGID}
                 volumes:
                         - ${BASE_DIR}/config/jellyfin:/config
                         - /etc/localtime:/etc/localtime:ro
@@ -122,5 +118,17 @@ volumes:
                         config: "${RCLONE_CONFIG}"
                         args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
                         remote: ${RCLONE_BUCKET}:/
+        gdrive-tv:
+                driver: sapk/plugin-rclone:latest
+                driver_opts:
+                        config: "${RCLONE_CONFIG}"
+                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
+                        remote: ${RCLONE_BUCKET}:/tv
+        gdrive-movies:
+                driver: sapk/plugin-rclone:latest
+                driver_opts:
+                        config: "${RCLONE_CONFIG}"
+                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
+                        remote: ${RCLONE_BUCKET}:/movies
 networks:
         media:
