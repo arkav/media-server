@@ -64,7 +64,7 @@ services:
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
-                        - UMASK=${UMASK
+                        - UMASK=${UMASK}
                         - TZ=Europe/London
                 depends_on:
                         - qbittorrentvpn
