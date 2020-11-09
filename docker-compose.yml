@@ -117,13 +117,13 @@ volumes:
                 driver: sapk/plugin-rclone:latest
                 driver_opts:
                         config: "${RCLONE_CONFIG}"
-                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
+                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list "
                         remote: ${RCLONE_BUCKET}:tv
         gdrive-movies:
                 driver: sapk/plugin-rclone:latest
                 driver_opts:
                         config: "${RCLONE_CONFIG}"
-                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
+                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list "
                         remote: ${RCLONE_BUCKET}:movies
 networks:
         media:
