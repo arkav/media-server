@@ -104,7 +104,8 @@ services:
                 volumes:
                         - ${BASE_DIR}/config/jellyfin:/config
                         - /etc/localtime:/etc/localtime:ro
-                        - gdrive:/media:rw
+                        - gdrive-tv:/media/tv
+                        - gdrive-movies:/media/movies
                 # pass throught my igpu
                 devices:
                         - /dev/dri/renderD128:/dev/dri/renderD128
@@ -112,12 +113,6 @@ services:
                 restart: unless-stopped
 
 volumes:
-        gdrive:
-                driver: sapk/plugin-rclone:latest
-                driver_opts:
-                        config: "${RCLONE_CONFIG}"
-                        args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
-                        remote: ${RCLONE_BUCKET}:/
         gdrive-tv:
                 driver: sapk/plugin-rclone:latest
                 driver_opts:
