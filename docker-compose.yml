@@ -42,7 +42,7 @@ services:
                 hostname: jackett
                 volumes:
                         - ${BASE_DIR}/config/jackett:/config
-                        - ${BASE_DIR}/local/torrents/incomplete:/downloads
+                        - ${BASE_DIR}/local/torrents:/downloads
                         - /etc/localtime:/etc/localtime:ro
                 environment:
                         - PUID=${PUID}
@@ -58,13 +58,13 @@ services:
                 hostname: sonarr
                 volumes:
                         - ${BASE_DIR}/config/sonarr:/config
-                        - ${BASE_DIR}/local/torrents/incomplete:/downloads
+                        - ${BASE_DIR}/local/torrents:/downloads
                         - /etc/localtime:/etc/localtime:ro
                         - gdrive-tv:/tv
                 environment:
                         - PUID=${PUID}
                         - PGID=${PGID}
-                        - UMASK=${UMASK}
+                        - UMASK=${UMASK
                         - TZ=Europe/London
                 depends_on:
                         - qbittorrentvpn
@@ -80,7 +80,7 @@ services:
                 hostname: radarr
                 volumes:
                         - ${BASE_DIR}/config/radarr:/config
-                        - ${BASE_DIR}/local/torrents/incomplete:/downloads
+                        - ${BASE_DIR}/local/torrents:/downloads
                         - /etc/localtime:/etc/localtime:ro
                         - gdrive-movies:/movies
                 environment:
@@ -118,12 +118,12 @@ volumes:
                 driver_opts:
                         config: "${RCLONE_CONFIG}"
                         args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
-                        remote: ${RCLONE_BUCKET}:/tv
+                        remote: ${RCLONE_BUCKET}:tv
         gdrive-movies:
                 driver: sapk/plugin-rclone:latest
                 driver_opts:
                         config: "${RCLONE_CONFIG}"
                         args: "--buffer-size 256M --drive-chunk-size 512M --checkers 10 --transfers 10 --bwlimit 100M --tpslimit 10 --fast-list --allow-other"
-                        remote: ${RCLONE_BUCKET}:/movies
+                        remote: ${RCLONE_BUCKET}:movies
 networks:
         media:
