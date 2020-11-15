@@ -13,7 +13,7 @@ services:
                         - media
                 hostname: delugevpn
                 volumes:
-                        - ${BASE_DIR}/config/deluge:/config
+                        - ${BASE_DIR}/config/delugevpn:/config
                         - ${BASE_DIR}/local/torrents:/data
                         - /etc/localtime:/etc/localtime:ro
                 environment:
