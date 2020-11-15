@@ -67,7 +67,7 @@ services:
                         - UMASK=000
                         - TZ=Europe/London
                 depends_on:
-                        - qbittorrentvpn
+                        - delugevpn
                         - jackett
                 restart: unless-stopped
         radarr:
@@ -89,7 +89,7 @@ services:
                         - UMASK=000
                         - TZ=Europe/London
                 depends_on:
-                        - qbittorrentvpn
+                        - delugevpn
                         - jackett
                 restart: unless-stopped
         jellyfin:

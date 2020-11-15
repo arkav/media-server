@@ -1,3 +1,6 @@
+#!/bin/sh
+
+# bootstrap env file for docker-compose
 rm .env
 BASE_DIR=$(pwd)
 echo "set base dir: ${BASE_DIR}"
