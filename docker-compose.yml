@@ -19,11 +19,11 @@ services:
                 environment:
                         - LAN_NETWORK=192.168.1.0/24
                         - NAME_SERVERS=209.222.18.222,84.200.69.80,37.235.1.174,1.1.1.1,209.222.18.218,37.235.1.177,84.200.70.40,1.0.0.1
-                        - WEBGUI_PORT=8080
                         - DEBUG=false
                         - ENABLE_PRIVOXY=no
                           # vpn
                         - VPN_ENABLED=yes
+                        - VPN_CLIENT=openvpn
                         - VPN_PROV=airvpn
                           # id <username>
                         - ADDITIONAL_PORTS=39821
