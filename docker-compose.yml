@@ -2,18 +2,18 @@ version: "3.2"
 services:
         # deluge
         qbittorrentvpn:
-                image: binhex/arch-qbittorrentvpn
-                container_name: qbittorrentvpn
+                image: binhex/arch-delugevpn
+                container_name: delugevpn
                 ports:
-                        - 6881:6881
-                        - 6881:6881/udp
-                        - 8080:8080
+                        - 8112:8112
                         - 8118:8118
+                        - 58846:58846
+                        - 58946:58946
                 networks:
                         - media
-                hostname: qbittorrentvpn
+                hostname: delugevpn
                 volumes:
-                        - ${BASE_DIR}/config/qbittorrent:/config
+                        - ${BASE_DIR}/config/deluge:/config
                         - ${BASE_DIR}/local/torrents:/data
                         - /etc/localtime:/etc/localtime:ro
                 environment:
